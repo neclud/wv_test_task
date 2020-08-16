@@ -1,4 +1,5 @@
 Тестовое задание
+
 Box в Vagrant ubuntu/xenial64, хосты:
 balancer 10.124.0.2
 front1 10.124.0.3
