@@ -1,0 +1,26 @@
+---
+# handlers file for elastic
+- name: restart logstash
+  systemd:
+    name: logstash
+    state: restarted
+    enabled: yes
+
+- name: reload logstash
+  systemd:
+    name: logstash
+    state: reloaded
+    enabled: yes
+
+- name: restart kibana
+  systemd:
+    name: kibana
+    state: restarted
+    enabled: yes
+
+- name: reload kibana
+  systemd:
+    name: kibana
+    state: reloaded
+    enabled: yes
+

@@ -1,0 +1,24 @@
+---
+# tasks file for filebeat_install
+- name: get deb
+  apt:
+    deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.8.1-amd64.deb
+
+- name: enable nginx module
+  command: filebeat modules enable nginx
+    
+- name: put filebeat config
+  template:
+    src: "{{item}}.j2"
+    dest: "/etc/filebeat/filebeat.yml"
+  with_items:
+    - "{{ filebeat_config }}"
+  when: filebeat_config is defined
+  notify:
+  - restart filebeat
+
+- name: enable service filebeat
+  systemd:
+    name: filebeat
+    enabled: yes
+    masked: no

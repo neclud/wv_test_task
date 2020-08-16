@@ -1,0 +1,41 @@
+---
+# tasks file for nginx_install
+
+- name: install nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: put nginx.conf
+  template:
+    src: "{{item}}.j2"
+    dest: "/etc/nginx/nginx.conf"
+  with_items:
+    - "{{ nginx_conf }}"
+  when: nginx_conf is defined
+  notify:
+  - reload nginx
+
+- name: put configs
+  template:
+    src: "{{item}}.j2"
+    dest: "/etc/nginx/conf.d/{{item}}.conf"
+  with_items:
+    - "{{ nginx_configs }}"
+  when: nginx_configs is defined
+  notify:
+  - reload nginx
+
+- name: remove default website config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify:
+  - reload nginx
+  when: remove_nginx_default is defined
+
+- name: enable service nginx
+  systemd:
+    name: nginx
+    enabled: yes
+    masked: no

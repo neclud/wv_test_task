@@ -1,0 +1,42 @@
+---
+
+- hosts: back
+  roles:
+    - role: nginx_install
+    - role: filebeat_install
+  vars:
+    filebeat_config:
+      - filebeat
+
+- hosts: balancer
+  roles:
+    - role: nginx_install
+    - role: filebeat_install
+  vars:
+    nginx_conf:
+      - nginx-balancer
+    nginx_configs:
+      - nginx-site
+    remove_nginx_default:
+      - yes
+    filebeat_config:
+      - filebeat
+
+- hosts: fronts
+  roles:
+    - role: nginx_install
+    - role: filebeat_install
+  vars:
+    nginx_conf:
+      - nginx-fronts
+    nginx_configs:
+      - nginx-site
+    remove_nginx_default:
+      - yes
+    filebeat_config:
+      - filebeat
+
+- hosts: elk
+  roles:
+    - role: elk
+
